@@ -1,4 +1,10 @@
+import sqlite3
 from flask import Flask, render_template
+from dao.aluno_dao import AlunoDAO
+from dao.professor_dao import ProfessorDAO
+from dao.curso_dao import CursoDAO
+from dao.turma_dao import TurmaDAO
+from dao.db_config import get_db_connection
 
 # Criação da aplicação Flask.
 app = Flask(__name__)
@@ -24,12 +30,28 @@ def contato_sistema():
     return render_template('contato.html')
 
 @app.route('/aluno')
-def aluno_listar():
-    return render_template('aluno/lista_A.html')
+def listar_aluno():
+    dao = AlunoDAO()
+    lista = dao.listar()
+    return render_template('aluno/lista.html', lista=lista)
 
 @app.route('/professor')
-def professor_listar():
-    return render_template('professor/lista_P.html')
+def listar_professor():
+    dao = ProfessorDAO()
+    lista = dao.listar()
+    return render_template('professor/lista.html', lista=lista)
+
+@app.route('/curso')
+def listar_curso():
+    dao = CursoDAO()
+    lista = dao.listar()
+    return render_template('curso/lista.html', lista=lista)
+
+@app.route('/turma')
+def listar_turma():
+    dao = TurmaDAO()
+    lista = dao.listar()
+    return render_template('turma/lista.html', lista=lista)
 
 
 

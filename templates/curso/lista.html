@@ -1,0 +1,46 @@
+{% include '/dashboard/cabecalho.html' %}
+{% include '/dashboard/menu.html' %}
+
+<h1 class="mb-4">Lista de Cursos</h1>
+
+<div class="row">
+
+    <table class="table table-bordered table-striped">
+
+        <thead class="table-dark">
+
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Duração</th>
+                <th>Ações</th>
+            </tr>
+
+        </thead>
+
+    <tbody>
+
+        {% for item in lista_alunos %}
+
+        <tr>
+            <td>{{ item[0] }}</td>
+            <td>{{ item[1] }}</td>
+            <td>{{ item[2] }}</td>
+            <td>
+              
+                <a href="/curso/editar/{{ item[0] }}" class="btn btn-primary btn-sm">Editar</a>
+                <a href="/curso/remover/{{ item[0] }}" class="btn btn-danger btn-sm"
+                     onclick="return confirm('Tem certeza que deseja remover este registro?');">Remover</a>
+
+            </td>
+        </tr>
+        
+        {% endfor %}
+
+    </tbody>
+    </table>
+
+
+</div>
+
+{% include '/dashboard/rodape.html' %}
