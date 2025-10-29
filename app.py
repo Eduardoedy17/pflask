@@ -1,4 +1,5 @@
 import sqlite3
+import psycopg2
 from flask import Flask, render_template
 from dao.aluno_dao import AlunoDAO
 from dao.professor_dao import ProfessorDAO
