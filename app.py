@@ -9,7 +9,6 @@ from dao.db_config import get_db_connection
 
 # Criação da aplicação Flask.
 app = Flask(__name__)
-
 # Desabilitar o cache do Jinja2 para desenvolvimento.
 app.jinja_env.cache = {}
 

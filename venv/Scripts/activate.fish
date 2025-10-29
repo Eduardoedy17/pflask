@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV 'D:\Eduardo Sousa\Documents\LICENCIATURA EM COMPUTAÇÃO\IFPI - L.COM - 2025.2\pflask\pflask\venv'
+set -gx VIRTUAL_ENV 'D:\Eduardo Sousa\Documents\LICENCIATURA EM COMPUTAÇÃO\IFPI - L.COM - 2025.2\Programação WEB\pflask\venv'
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"Scripts $PATH
