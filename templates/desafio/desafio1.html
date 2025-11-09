@@ -1,0 +1,22 @@
+{% include '/dashboard/cabecalho.html' %}
+{% include '/dashboard/menu.html' %}
+
+{% if nome_recebido %}
+    <h1 class="mb-4">{{nome_recebido}}</h1>
+{% endif %}
+
+<h1>Desafio 1: Formulário de Cadastro</h1>
+
+<form action="/desafio" method="post">
+    <input type="text" name="nome" placeholder="Nome"> <br><br>
+    
+    <input type="email" name="email" placeholder="E-mail"> <br><br> 
+
+    <input type="text" name="dt_nascimento" placeholder="Data de Nascimento"> <br><br>
+    <input type="text" name="cpf" placeholder="CPF"> <br><br>
+    <input type="text" name="nome_mae" placeholder="Nome da Mãe"> <br><br>
+    <button type="submit">Enviar</button>
+</form>
+
+
+{% include '/dashboard/rodape.html' %}
