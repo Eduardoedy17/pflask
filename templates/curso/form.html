@@ -1,0 +1,34 @@
+
+{% include 'dashboard/cabecalho.html' %}
+{% include '/dashboard/menu.html' %}
+
+<!-- Formulário de Curso -->
+<h1 class="mb-4">Cadastrar Curso</h1>
+
+
+<div class="row">
+    <div class="col-12">
+      <form action="/curso/salvar/" method="POST">
+
+        <!-- Disciplina -->
+        <div class="mb-3">
+          <label for="nome" class="form-label">Disciplina</label>
+          <input type="text" class="form-control" id="nome" name="nome" value="{{ curso[1] }}" required>
+        </div>
+  
+        <!-- Duração -->
+        <div class="mb-3">
+          <label for="duracao" class="form-label">Duração</label>
+          <input type="text" class="form-control" id="duracao" name="duracao" value="{{ curso[2] }}" required>
+        </div>
+  
+        <!-- Botões -->
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Salvar</button>
+          <a href="/curso" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+    </div>
+  </div>
+  
+  {% include 'dashboard/rodape.html' %}

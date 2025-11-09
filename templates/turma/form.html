@@ -1,0 +1,40 @@
+
+{% include 'dashboard/cabecalho.html' %}
+{% include '/dashboard/menu.html' %}
+
+<!-- Formulário de Turma -->
+<h1 class="mb-4">Cadastrar Turmas</h1>
+
+
+<div class="row">
+    <div class="col-12">
+      <form action="/turma/salvar/" method="POST">
+  
+        <!-- Semestre -->
+        <div class="mb-3">
+          <label for="semestre" class="form-label">Semestre</label>
+          <input type="text" class="form-control" id="semestre" name="semestre" value="{{ turma[1] }}" required>
+        </div>
+  
+        <!-- Curso -->
+        <div class="mb-3">
+          <label for="curso" class="form-label">Curso</label>
+          <input type="number" class="form-control" id="curso" name="curso" value="{{ turma[2] }}" required>
+        </div>
+  
+        <!-- Professor -->
+        <div class="mb-3">
+          <label for="professor" class="form-label">Professor</label>
+          <input type="text" class="form-control" id="professor" name="professor" value="{{ turma[3] }}" required>
+        </div>
+  
+        <!-- Botões -->
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Salvar</button>
+          <a href="/turma" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+    </div>
+  </div>
+  
+  {% include 'dashboard/rodape.html' %}

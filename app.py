@@ -1,6 +1,6 @@
 import sqlite3
 import psycopg2
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, flash
 from dao.aluno_dao import AlunoDAO
 from dao.professor_dao import ProfessorDAO
 from dao.curso_dao import CursoDAO
@@ -9,6 +9,10 @@ from dao.db_config import get_db_connection
 
 # Criação da aplicação Flask.
 app = Flask(__name__) 
+
+# Configuração da chave secreta para sessões e flash messages.
+app.secret_key = 'uma_chave_muito_secreta_e_unica'
+
 # Desabilitar o cache do Jinja2 para desenvolvimento.
 app.jinja_env.cache = {}
 
@@ -35,11 +39,49 @@ def listar_aluno():
     lista = dao.listar()
     return render_template('aluno/lista.html', lista=lista)
 
+@app.route('/aluno/form')
+def form_aluno():
+    return render_template('aluno/form.html', aluno=None)
+
+@app.route('/aluno/salvar/', methods=['POST'])  # Inserção
+def salvar_aluno(id=None):
+    nome = request.form['nome']
+    idade = request.form['idade']
+    cidade = request.form['cidade']
+    dao = AlunoDAO()
+    result = dao.salvar(id, nome, idade, cidade) 
+
+    if result["status"] == "ok":
+        flash("Aluno salvo com sucesso!", "success")
+    else:
+        flash(result["mensagem"], "danger")
+
+
+    return redirect('/aluno')
+
 @app.route('/professor')
 def listar_professor():
     dao = ProfessorDAO()
     lista = dao.listar()
     return render_template('professor/lista.html', lista=lista)
+
+@app.route('/professor/form')
+def form_professor():
+    return render_template('professor/form.html', professor=None)
+
+@app.route('/professor/salvar/', methods=['POST'])  # Inserção
+def salvar_professor(id=None):
+    nome = request.form['nome']
+    disciplina = request.form['disciplina']
+    dao = ProfessorDAO()
+    result = dao.salvar(id, nome, disciplina) 
+
+    if result["status"] == "ok":
+        flash("Professor salvo com sucesso!", "success")
+    else:
+        flash(result["mensagem"], "danger")
+
+    return redirect('/professor')
 
 @app.route('/curso')
 def listar_curso():
@@ -47,11 +89,48 @@ def listar_curso():
     lista = dao.listar()
     return render_template('curso/lista.html', lista=lista)
 
+@app.route('/curso/form')
+def form_curso():
+    return render_template('curso/form.html', curso=None)
+
+@app.route('/curso/salvar/', methods=['POST'])  # Inserção
+def salvar_curso(id=None):
+    nome_curso = request.form['nome_curso']
+    duracao = request.form['duracao']
+    dao = CursoDAO()
+    result = dao.salvar(id, nome_curso, duracao) 
+
+    if result["status"] == "ok":
+        flash("Curso salvo com sucesso!", "success")
+    else:
+        flash(result["mensagem"], "danger")
+
+    return redirect('/curso')
+
 @app.route('/turma')
 def listar_turma():
     dao = TurmaDAO()
     lista = dao.listar()
     return render_template('turma/lista.html', lista=lista)
+
+@app.route('/turma/form')
+def form_turma():
+    return render_template('turma/form.html', turma=None)
+
+@app.route('/turma/salvar/', methods=['POST'])  # Inserção
+def salvar_turma(id=None):
+    semestre = request.form['semestre']
+    curso_id = request.form['curso_id']
+    professor_id = request.form['professor_id']
+    dao = TurmaDAO()
+    result = dao.salvar(id, semestre, curso_id, professor_id) 
+
+    if result["status"] == "ok":
+        flash("Turma salva com sucesso!", "success")
+    else:
+        flash(result["mensagem"], "danger")
+
+    return redirect('/turma')
 
 @app.route('/saudacao1/<nome>')
 def saudacao1(nome):
