@@ -59,6 +59,22 @@ def salvar_aluno(id=None):
 
     return redirect('/aluno')
 
+@app.route('/aluno/atualizar/', methods=['POST'])  # Atualização
+def atualizar_aluno():
+    id = request.form['id']
+    nome = request.form['nome']
+    idade = request.form['idade']
+    cidade = request.form['cidade']
+    dao = AlunoDAO()
+    result = dao.atualizar(id, nome, idade, cidade) 
+
+    if result["status"] == "ok":
+        flash("Aluno atualizado com sucesso!", "success")
+    else:
+        flash(result["mensagem"], "danger")
+
+    return redirect('/aluno')
+
 @app.route('/professor')
 def listar_professor():
     dao = ProfessorDAO()
