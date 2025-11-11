@@ -52,7 +52,7 @@ def salvar_aluno(id=None):
     result = dao.salvar(id, nome, idade, cidade) 
 
     if result["status"] == "ok":
-        flash("Aluno salvo com sucesso!", "success")
+        flash("Registro salvo com sucesso!", "success")
     else:
         flash(result["mensagem"], "danger")
 
@@ -69,7 +69,7 @@ def atualizar_aluno():
     result = dao.atualizar(id, nome, idade, cidade) 
 
     if result["status"] == "ok":
-        flash("Aluno atualizado com sucesso!", "success")
+        flash("Registro salvo com sucesso!", "success")
     else:
         flash(result["mensagem"], "danger")
 
@@ -93,7 +93,7 @@ def salvar_professor(id=None):
     result = dao.salvar(id, nome, disciplina) 
 
     if result["status"] == "ok":
-        flash("Professor salvo com sucesso!", "success")
+        flash("Registro salvo com sucesso!", "success")
     else:
         flash(result["mensagem"], "danger")
 
@@ -117,7 +117,7 @@ def salvar_curso(id=None):
     result = dao.salvar(id, nome_curso, duracao) 
 
     if result["status"] == "ok":
-        flash("Curso salvo com sucesso!", "success")
+        flash("Registro salvo com sucesso!", "success")
     else:
         flash(result["mensagem"], "danger")
 
@@ -142,7 +142,7 @@ def salvar_turma(id=None):
     result = dao.salvar(id, semestre, curso_id, professor_id) 
 
     if result["status"] == "ok":
-        flash("Turma salva com sucesso!", "success")
+        flash("Registro salvo com sucesso!", "success")
     else:
         flash(result["mensagem"], "danger")
 
