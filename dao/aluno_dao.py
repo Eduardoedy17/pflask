@@ -16,7 +16,10 @@ class AlunoDAO:
         conn = get_db_connection()
         cursor = conn.cursor()
         try:
-            cursor.execute('INSERT INTO aluno (nome, idade, cidade) VALUES (%s, %s, %s)', (nome, idade, cidade))
+            if id:  # atualizar pois um valor para id foi informado
+                cursor.execute('UPDATE aluno SET nome=%s, idade=%s, cidade=%s WHERE id=%s', (nome, idade, cidade, id))
+            else:  # inserir novo registro
+                cursor.execute('INSERT INTO aluno (nome, idade, cidade) VALUES (%s, %s, %s)', (nome, idade, cidade))
             conn.commit()
             return {"status": "ok"}
         except Exception as e:
@@ -24,14 +27,23 @@ class AlunoDAO:
         finally:
             conn.close()
 
-    def atualizar(self, id, nome, idade, cidade):
+    def buscar_por_id(self, id):
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT id, nome, idade, cidade FROM aluno WHERE id = %s', (id,))
+        registro = cursor.fetchone() # retorna o registro selecionado.
+        conn.close()
+        return registro
+
+    def remover(self, id):
         conn = get_db_connection()
         cursor = conn.cursor()
         try:
-            cursor.execute('UPDATE aluno SET nome=%s, idade=%s, cidade=%s WHERE id=%s', (nome, idade, cidade, id))
+            cursor.execute('DELETE FROM aluno WHERE id=%s', (id,))
             conn.commit()
-            return {"status": "ok"}
+            return {"status": "ok"} 
         except Exception as e:
             return {"status": "erro", "mensagem": f"Erro: {str(e)}"}
         finally:
             conn.close()
+

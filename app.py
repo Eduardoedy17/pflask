@@ -44,6 +44,7 @@ def form_aluno():
     return render_template('aluno/form.html', aluno=None)
 
 @app.route('/aluno/salvar/', methods=['POST'])  # Inserção
+@app.route('/aluno/salvar/<int:id>', methods=['POST'])  # atualização
 def salvar_aluno(id=None):
     nome = request.form['nome']
     idade = request.form['idade']
@@ -56,20 +57,21 @@ def salvar_aluno(id=None):
     else:
         flash(result["mensagem"], "danger")
 
-
     return redirect('/aluno')
 
-@app.route('/aluno/atualizar/', methods=['POST'])  # Atualização
-def atualizar_aluno():
-    id = request.form['id']
-    nome = request.form['nome']
-    idade = request.form['idade']
-    cidade = request.form['cidade']
+@app.route('/aluno/editar/<int:id>')
+def editar_aluno(id):
     dao = AlunoDAO()
-    result = dao.atualizar(id, nome, idade, cidade) 
+    aluno = dao.buscar_por_id(id)
+    return render_template('aluno/form.html', aluno=aluno)
+
+@app.route('/aluno/remover/<int:id>')
+def remover_aluno(id):
+    dao = AlunoDAO()
+    result = dao.remover(id)
 
     if result["status"] == "ok":
-        flash("Registro salvo com sucesso!", "success")
+        flash("Registro removido com sucesso!", "success")
     else:
         flash(result["mensagem"], "danger")
 
@@ -86,6 +88,7 @@ def form_professor():
     return render_template('professor/form.html', professor=None)
 
 @app.route('/professor/salvar/', methods=['POST'])  # Inserção
+@app.route('/professor/salvar/<int:id>', methods=['POST'])  # atualização
 def salvar_professor(id=None):
     nome = request.form['nome']
     disciplina = request.form['disciplina']
@@ -94,6 +97,24 @@ def salvar_professor(id=None):
 
     if result["status"] == "ok":
         flash("Registro salvo com sucesso!", "success")
+    else:
+        flash(result["mensagem"], "danger")
+
+    return redirect('/professor')
+
+@app.route('/professor/editar/<int:id>')
+def editar_professor(id):
+    dao = ProfessorDAO()
+    professor = dao.buscar_por_id(id)
+    return render_template('professor/form.html', professor=professor)
+
+@app.route('/professor/remover/<int:id>')
+def remover_professor(id): 
+    dao = ProfessorDAO()
+    result = dao.remover(id)
+
+    if result["status"] == "ok":
+        flash("Registro removido com sucesso!", "success")
     else:
         flash(result["mensagem"], "danger")
 

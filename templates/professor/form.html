@@ -8,18 +8,18 @@
 
 <div class="row">
     <div class="col-12">
-      <form action="/professor/salvar/" method="POST">
+      <form action="/professor/salvar/{{ professor.0 }}" method="POST">
   
         <!-- Nome -->
         <div class="mb-3">
           <label for="nome" class="form-label">Nome</label>
-          <input type="text" class="form-control" id="nome" name="nome" value="{{ professor[1] }}" required>
+          <input type="text" class="form-control" id="nome" name="nome" value="{{ professor.1 }}" required>
         </div>
 
         <!-- Disciplina -->
         <div class="mb-3">
           <label for="disciplina" class="form-label">Disciplina</label>
-          <input type="text" class="form-control" id="disciplina" name="disciplina" value="{{ professor[4] }}" required>
+          <input type="text" class="form-control" id="disciplina" name="disciplina" value="{{ professor.2 }}" required>
         </div>
 
         <!-- Botões -->
