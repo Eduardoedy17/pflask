@@ -1,28 +1,23 @@
-
 {% include 'dashboard/cabecalho.html' %}
 {% include '/dashboard/menu.html' %}
 
-<!-- Formulário de Professor -->
 <h1 class="mb-4">Cadastrar Professor</h1>
 
 
 <div class="row">
     <div class="col-12">
-      <form action="/professor/salvar/{{ professor.0 }}" method="POST">
+      <form action="/professor/salvar/{% if professor %}{{ professor[0] }}{% endif %}" method="POST">
   
-        <!-- Nome -->
         <div class="mb-3">
           <label for="nome" class="form-label">Nome</label>
-          <input type="text" class="form-control" id="nome" name="nome" value="{{ professor.1 }}" required>
+          <input type="text" class="form-control" id="nome" name="nome" value="{% if professor %}{{ professor[1] }}{% endif %}" required>
         </div>
 
-        <!-- Disciplina -->
         <div class="mb-3">
           <label for="disciplina" class="form-label">Disciplina</label>
-          <input type="text" class="form-control" id="disciplina" name="disciplina" value="{{ professor.2 }}" required>
+          <input type="text" class="form-control" id="disciplina" name="disciplina" value="{% if professor %}{{ professor[2] }}{% endif %}" required>
         </div>
 
-        <!-- Botões -->
         <div class="d-flex gap-2">
           <button type="submit" class="btn btn-primary">Salvar</button>
           <a href="/professor" class="btn btn-secondary">Cancelar</a>

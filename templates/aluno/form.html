@@ -1,33 +1,27 @@
-
 {% include 'dashboard/cabecalho.html' %}
 {% include '/dashboard/menu.html' %}
 
-<!-- Formulário de Aluno -->
 <h1 class="mb-4">Cadastrar Aluno</h1>
-
 
 <div class="row">
     <div class="col-12">
-      <form action="/aluno/salvar/{{ aluno.0 }}" method="POST">  
-        <!-- Nome -->
+      <form action="/aluno/salvar/{% if aluno %}{{ aluno[0] }}{% endif %}" method="POST">  
+        
         <div class="mb-3">
           <label for="nome" class="form-label">Nome</label>
-          <input type="text" class="form-control" id="nome" name="nome" value="{{ aluno[1] }}" required>
+          <input type="text" class="form-control" id="nome" name="nome" value="{% if aluno %}{{ aluno[1] }}{% endif %}" required>
         </div>
   
-        <!-- Idade -->
         <div class="mb-3">
           <label for="idade" class="form-label">Idade</label>
-          <input type="number" class="form-control" id="idade" name="idade" value="{{ aluno[2] }}" required>
+          <input type="number" class="form-control" id="idade" name="idade" value="{% if aluno %}{{ aluno[2] }}{% endif %}" required>
         </div>
   
-        <!-- Cidade -->
         <div class="mb-3">
           <label for="cidade" class="form-label">Cidade</label>
-          <input type="text" class="form-control" id="cidade" name="cidade" value="{{ aluno[3] }}" required>
+          <input type="text" class="form-control" id="cidade" name="cidade" value="{% if aluno %}{{ aluno[3] }}{% endif %}" required>
         </div>
   
-        <!-- Botões -->
         <div class="d-flex gap-2">
           <button type="submit" class="btn btn-primary">Salvar</button>
           <a href="/aluno" class="btn btn-secondary">Cancelar</a>
@@ -36,4 +30,4 @@
     </div>
   </div>
   
-  {% include 'dashboard/rodape.html' %}
+{% include 'dashboard/rodape.html' %}

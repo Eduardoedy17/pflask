@@ -44,7 +44,7 @@ def form_aluno():
     return render_template('aluno/form.html', aluno=None)
 
 @app.route('/aluno/salvar/', methods=['POST'])  # Inserção
-@app.route('/aluno/salvar/<int:id>', methods=['POST'])  # atualização
+@app.route('/aluno/remover/<int:id>', methods=['POST'])  # atualização
 def salvar_aluno(id=None):
     nome = request.form['nome']
     idade = request.form['idade']
