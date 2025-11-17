@@ -38,6 +38,14 @@ class TurmaDAO:
         finally:
             conn.close()
 
+    def buscar_por_id(self, id):
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT id, semestre, curso_id, professor_id FROM turma WHERE id = %s', (id,))
+        turma = cursor.fetchone()
+        conn.close()
+        return turma
+
     def remover(self, id):
         conn = get_db_connection()
         cursor = conn.cursor()

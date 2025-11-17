@@ -36,6 +36,14 @@ class CursoDAO:
         finally:
             conn.close()
 
+    def buscar_por_id(self, id):
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT id, nome_curso, duracao FROM curso WHERE id = %s', (id,))
+        curso = cursor.fetchone()
+        conn.close()
+        return curso
+
     def remover(self, id):
         conn = get_db_connection()
         cursor = conn.cursor()
