@@ -1,30 +1,37 @@
-
 {% include 'dashboard/cabecalho.html' %}
 {% include '/dashboard/menu.html' %}
 
-<!-- Formulário de Curso -->
-<h1 class="mb-4">Cadastrar Curso</h1>
+<h1 class="mb-4">
+    {% if curso %}
+        Editar Curso
+    {% else %}
+        Cadastrar Curso
+    {% endif %}
+</h1>
 
 
 <div class="row">
     <div class="col-12">
-      <form action="/curso/salvar/" method="POST">
+      <form action="/curso/salvar/{% if curso %}{{ curso[0] }}{% endif %}" method="POST">
 
-        <!-- Disciplina -->
         <div class="mb-3">
           <label for="nome_curso" class="form-label">Disciplina</label>
-          <input type="text" class="form-control" id="nome_curso" name="nome_curso" value="{{ curso[1] }}" required>
+          <input type="text" class="form-control" id="nome_curso" name="nome_curso" value="{% if curso %}{{ curso[1] }}{% endif %}" required>
         </div>
   
-        <!-- Duração -->
         <div class="mb-3">
           <label for="duracao" class="form-label">Duração</label>
-          <input type="text" class="form-control" id="duracao" name="duracao" value="{{ curso[2] }}" required>
+          <input type="text" class="form-control" id="duracao" name="duracao" value="{% if curso %}{{ curso[2] }}{% endif %}" required>
         </div>
   
-        <!-- Botões -->
         <div class="d-flex gap-2">
-          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="submit" class="btn btn-primary">
+            {% if curso %}
+                Atualizar
+            {% else %}
+                Salvar
+            {% endif %}
+          </button>
           <a href="/curso" class="btn btn-secondary">Cancelar</a>
         </div>
     </form>

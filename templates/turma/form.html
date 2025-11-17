@@ -1,36 +1,42 @@
-
 {% include 'dashboard/cabecalho.html' %}
 {% include '/dashboard/menu.html' %}
 
-<!-- Formulário de Turma -->
-<h1 class="mb-4">Cadastrar Turmas</h1>
+<h1 class="mb-4">
+  {% if turma %}
+    Editar Turma
+  {% else %}
+    Cadastrar Turmas
+  {% endif %}
+</h1>
 
 
 <div class="row">
     <div class="col-12">
-      <form action="/turma/salvar/" method="POST">
+      <form action="/turma/salvar/{% if turma %}{{ turma[0] }}{% endif %}" method="POST">
   
-        <!-- Semestre -->
         <div class="mb-3">
           <label for="semestre" class="form-label">Semestre</label>
-          <input type="text" class="form-control" id="semestre" name="semestre" value="{{ turma[1] }}" required>
+          <input type="text" class="form-control" id="semestre" name="semestre" value="{% if turma %}{{ turma[1] }}{% endif %}" required>
         </div>
   
-        <!-- Curso -->
         <div class="mb-3">
-          <label for="curso" class="form-label">Curso</label>
-          <input type="text" class="form-control" id="curso_id" name="curso_id" value="{{ turma[2] }}" required>
+          <label for="curso" class="form-label">Curso ID</label>
+          <input type="text" class="form-control" id="curso_id" name="curso_id" value="{% if turma %}{{ turma[2] }}{% endif %}" required>
         </div>
   
-        <!-- Professor -->
         <div class="mb-3">
-          <label for="professor" class="form-label">Professor</label>
-          <input type="text" class="form-control" id="professor_id" name="professor_id" value="{{ turma[3] }}" required>
+          <label for="professor" class="form-label">Professor ID</label>
+          <input type="text" class="form-control" id="professor_id" name="professor_id" value="{% if turma %}{{ turma[3] }}{% endif %}" required>
         </div>
   
-        <!-- Botões -->
         <div class="d-flex gap-2">
-          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="submit" class="btn btn-primary">
+            {% if turma %}
+                Atualizar
+            {% else %}
+                Salvar
+            {% endif %}
+          </button>
           <a href="/turma" class="btn btn-secondary">Cancelar</a>
         </div>
     </form>

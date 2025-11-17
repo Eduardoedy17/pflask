@@ -1,7 +1,13 @@
 {% include 'dashboard/cabecalho.html' %}
 {% include '/dashboard/menu.html' %}
 
-<h1 class="mb-4">Cadastrar Professor</h1>
+<h1 class="mb-4">
+  {% if professor %}
+    Editar Professor
+  {% else %}
+    Cadastrar Professor
+  {% endif %}
+</h1>
 
 
 <div class="row">
@@ -19,7 +25,13 @@
         </div>
 
         <div class="d-flex gap-2">
-          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="submit" class="btn btn-primary">
+            {% if professor %}
+              Atualizar
+            {% else %}
+              Salvar
+            {% endif %}
+          </button>
           <a href="/professor" class="btn btn-secondary">Cancelar</a>
         </div>
     </form>

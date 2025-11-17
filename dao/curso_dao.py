@@ -23,3 +23,29 @@ class CursoDAO:
             return {"status": "erro", "mensagem": f"Erro: {str(e)}"}
         finally:
             conn.close()
+
+    def atualizar(self, id, nome_curso, duracao):
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute('UPDATE curso SET nome_curso = %s, duracao = %s WHERE id = %s', (nome_curso, duracao, id))
+            conn.commit()
+            return {"status": "ok"}
+        except Exception as e:
+            return {"status": "erro", "mensagem": f"Erro: {str(e)}"}
+        finally:
+            conn.close()
+
+    def remover(self, id):
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute('DELETE FROM curso WHERE id = %s', (id,))
+            conn.commit()
+            return {"status": "ok"}
+        except Exception as e:
+            return {"status": "erro", "mensagem": f"Erro: {str(e)}"}
+        finally:
+            conn.close()
+
+    
