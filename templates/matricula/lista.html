@@ -14,7 +14,8 @@
                 <th>ID</th>
                 <th>Aluno</th>
                 <th>Curso</th>
-                <th>Semestre/Turma</th>
+                <th>Semestre</th>
+                <th>Turma</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -25,6 +26,7 @@
                 <td>{{ item[1] }}</td>
                 <td>{{ item[2] }}</td>
                 <td>{{ item[3] }}</td>
+                <td>{{ item[4] }}</td>
 <td>
                 <a href="/matricula/editar/{{ item[0] }}" class="btn btn-primary btn-sm">Editar</a>
                 <a href="/matricula/remover/{{ item[0] }}" class="btn btn-danger btn-sm"
