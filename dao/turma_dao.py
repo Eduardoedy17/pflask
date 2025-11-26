@@ -1,4 +1,4 @@
-from dao.db_config import get_db_connection  # Correção: O nome correto é get_db_connection
+from dao.db_config import get_db_connection
 
 class TurmaDAO:
 
@@ -7,7 +7,6 @@ class TurmaDAO:
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        # Query SQL com JOIN para trazer os nomes ao invés dos IDs
         sql = """
             SELECT turma.id, turma.semestre, curso.nome_curso, professor.nome, professor.disciplina
             FROM turma
@@ -59,14 +58,19 @@ class TurmaDAO:
         return turma
 
     def remover(self, id):
-        """ Remove uma turma pelo ID """
+        """ Remove uma turma e todas as matrículas associadas a ela (Cascata) """
         conn = get_db_connection()
         cursor = conn.cursor()
         try:
+            # 1. Primeiro: Remove as matrículas vinculadas a esta turma
+            cursor.execute('DELETE FROM matricula WHERE turma_id = %s', (id,))
+            
+            # 2. Segundo: Remove a turma
             cursor.execute('DELETE FROM turma WHERE id = %s', (id,))
+            
             conn.commit()
             return {"status": "ok"}
         except Exception as e:
-            return {"status": "erro", "mensagem": f"Erro: {str(e)}"}
+            return {"status": "erro", "mensagem": f"Erro ao excluir: {str(e)}"}
         finally:
             conn.close()
