@@ -36,6 +36,7 @@ def ajuda_sistema():
 def contato_sistema():
     return render_template('contato.html')
 
+# --- ROTAS DE ALUNO ---
 @app.route('/aluno')
 def listar_aluno():
     dao = AlunoDAO()
@@ -47,7 +48,7 @@ def form_aluno():
     return render_template('aluno/form.html', aluno=None)
 
 @app.route('/aluno/salvar/', methods=['POST'])  # Inserção
-@app.route('/aluno/salvar/<int:id>', methods=['POST'])  # atualização ✅
+@app.route('/aluno/salvar/<int:id>', methods=['POST'])  # Atualização
 def salvar_aluno(id=None):
     nome = request.form['nome']
     idade = request.form['idade']
@@ -80,68 +81,7 @@ def remover_aluno(id):
 
     return redirect('/aluno')
 
-# --- ROTAS DE MATRÍCULA ---
-
-@app.route('/matricula')
-def listar_matricula():
-    dao = MatriculaDAO()
-    lista = dao.listar()
-    return render_template('matricula/lista.html', lista=lista)
-
-@app.route('/matricula/form')
-def form_matricula():
-    # Carrega alunos e turmas para os selects
-    aluno_dao = AlunoDAO()
-    turma_dao = TurmaDAO()
-    alunos = aluno_dao.listar()
-    turmas = turma_dao.listar() # O ideal aqui seria um listar que mostrasse info da turma
-    
-    return render_template('matricula/form.html', matricula=None, alunos=alunos, turmas=turmas)
-
-@app.route('/matricula/salvar/', methods=['POST'])
-@app.route('/matricula/salvar/<int:id>', methods=['POST'])
-def salvar_matricula(id=None):
-    aluno_id = request.form['aluno_id']
-    turma_id = request.form['turma_id']
-    
-    # Precisamos descobrir o curso_id através da turma selecionada
-    turma_dao = TurmaDAO()
-    turma = turma_dao.buscar_por_id(turma_id)
-    curso_id = turma[2] # O índice 2 é o curso_id na tabela turma
-    
-    dao = MatriculaDAO()
-    result = dao.salvar(id, aluno_id, curso_id, turma_id)
-
-    if result["status"] == "ok":
-        flash("Matrícula realizada com sucesso!", "success")
-    else:
-        flash(result["mensagem"], "danger")
-
-    return redirect('/matricula')
-
-@app.route('/matricula/editar/<int:id>')
-def editar_matricula(id):
-    dao = MatriculaDAO()
-    matricula = dao.buscar_por_id(id) # Busca a matrícula pelo ID
-    
-    aluno_dao = AlunoDAO()
-    turma_dao = TurmaDAO()
-    
-    alunos = aluno_dao.listar() # Carrega lista para o select
-    turmas = turma_dao.listar() # Carrega lista para o select
-    
-    return render_template('matricula/form.html', matricula=matricula, alunos=alunos, turmas=turmas)
-
-@app.route('/matricula/remover/<int:id>')
-def remover_matricula(id):
-    dao = MatriculaDAO()
-    result = dao.remover(id)
-    if result["status"] == "ok":
-        flash("Matrícula removida!", "success")
-    else:
-        flash(result["mensagem"], "danger")
-    return redirect('/matricula')
-
+# --- ROTAS DE PROFESSOR ---
 @app.route('/professor')
 def listar_professor():
     dao = ProfessorDAO()
@@ -153,7 +93,7 @@ def form_professor():
     return render_template('professor/form.html', professor=None)
 
 @app.route('/professor/salvar/', methods=['POST'])  # Inserção
-@app.route('/professor/salvar/<int:id>', methods=['POST'])  # atualização
+@app.route('/professor/salvar/<int:id>', methods=['POST'])  # Atualização
 def salvar_professor(id=None):
     nome = request.form['nome']
     disciplina = request.form['disciplina']
@@ -185,6 +125,7 @@ def remover_professor(id):
 
     return redirect('/professor')
 
+# --- ROTAS DE CURSO ---
 @app.route('/curso')
 def listar_curso():
     dao = CursoDAO()
@@ -196,7 +137,7 @@ def form_curso():
     return render_template('curso/form.html', curso=None)
 
 @app.route('/curso/salvar/', methods=['POST'])  # Inserção
-@app.route('/curso/editar/<int:id>', methods=['POST'])  # atualização
+@app.route('/curso/salvar/<int:id>', methods=['POST'])  # Atualização (CORRIGIDO: era editar)
 def salvar_curso(id=None):
     nome_curso = request.form['nome_curso']
     duracao = request.form['duracao']
@@ -228,6 +169,7 @@ def remover_curso(id):
 
     return redirect('/curso')
 
+# --- ROTAS DE TURMA ---
 @app.route('/turma')
 def listar_turma():
     dao = TurmaDAO()
@@ -245,7 +187,7 @@ def form_turma():
     return render_template('turma/form.html', turma=None, cursos=cursos, professores=professores)
 
 @app.route('/turma/salvar/', methods=['POST'])  # Inserção
-@app.route('/turma/editar/<int:id>', methods=['POST'])  # atualização
+@app.route('/turma/salvar/<int:id>', methods=['POST'])  # Atualização (CORRIGIDO: era editar)
 def salvar_turma(id=None):
     semestre = request.form['semestre']
     curso_id = request.form['curso_id']
@@ -286,6 +228,74 @@ def remover_turma(id):
 
     return redirect('/turma')
 
+# --- ROTAS DE MATRÍCULA ---
+@app.route('/matricula')
+def listar_matricula():
+    dao = MatriculaDAO()
+    lista = dao.listar()
+    return render_template('matricula/lista.html', lista=lista)
+
+@app.route('/matricula/form')
+def form_matricula():
+    # Carrega alunos e turmas para os selects
+    aluno_dao = AlunoDAO()
+    turma_dao = TurmaDAO()
+    alunos = aluno_dao.listar()
+    turmas = turma_dao.listar() 
+    
+    return render_template('matricula/form.html', matricula=None, alunos=alunos, turmas=turmas)
+
+@app.route('/matricula/salvar/', methods=['POST']) # Inserção
+@app.route('/matricula/salvar/<int:id>', methods=['POST']) # Atualização
+def salvar_matricula(id=None):
+    aluno_id = request.form['aluno_id']
+    turma_id = request.form['turma_id']
+    
+    # Precisamos descobrir o curso_id através da turma selecionada
+    turma_dao = TurmaDAO()
+    turma = turma_dao.buscar_por_id(turma_id)
+    # Se a turma não for encontrada (o que é raro), isso poderia dar erro. 
+    # Mas assumindo integridade, o curso_id está na posição 2.
+    if turma:
+        curso_id = turma[2] 
+    else:
+        flash("Erro ao localizar a turma selecionada.", "danger")
+        return redirect('/matricula')
+    
+    dao = MatriculaDAO()
+    result = dao.salvar(id, aluno_id, curso_id, turma_id)
+
+    if result["status"] == "ok":
+        flash("Matrícula salva com sucesso!", "success")
+    else:
+        flash(result["mensagem"], "danger")
+
+    return redirect('/matricula')
+
+@app.route('/matricula/editar/<int:id>')
+def editar_matricula(id):
+    dao = MatriculaDAO()
+    matricula = dao.buscar_por_id(id) 
+    
+    aluno_dao = AlunoDAO()
+    turma_dao = TurmaDAO()
+    
+    alunos = aluno_dao.listar() 
+    turmas = turma_dao.listar() 
+    
+    return render_template('matricula/form.html', matricula=matricula, alunos=alunos, turmas=turmas)
+
+@app.route('/matricula/remover/<int:id>')
+def remover_matricula(id):
+    dao = MatriculaDAO()
+    result = dao.remover(id)
+    if result["status"] == "ok":
+        flash("Matrícula removida!", "success")
+    else:
+        flash(result["mensagem"], "danger")
+    return redirect('/matricula')
+
+# --- ROTAS DE EXEMPLO/TESTE ---
 @app.route('/saudacao1/<nome>')
 def saudacao1(nome):
     # dao.salvar(nome)
@@ -321,8 +331,6 @@ def desafio():
         dados_recebidos = f"Nome: {nome}, E-mail: {email}, Data de Nascimento: {dt_nascimento}, CPF: {cpf}, Nome da Mãe: {nome_mae}"
 
     # Renderize a página em AMBOS os casos (GET ou POST)
-    # Se for GET, dados_recebidos será None
-    # Se for POST, dados_recebidos terá os dados do formulário
     return render_template('desafio/desafio1.html', nome_recebido=dados_recebidos)
 
 #Método 'main' sempre no final do arquivo.

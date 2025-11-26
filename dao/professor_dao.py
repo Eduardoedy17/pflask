@@ -36,13 +36,28 @@ class ProfessorDAO:
         return registro
 
     def remover(self, id):
+        """ Remove professor e suas dependências (Turmas e Matrículas dessas turmas) """
         conn = get_db_connection()
         cursor = conn.cursor()
         try:
+            # 1. Buscar IDs das turmas deste professor
+            cursor.execute('SELECT id FROM turma WHERE professor_id = %s', (id,))
+            turmas = cursor.fetchall()
+            
+            # 2. Para cada turma do professor, remover as matrículas (para não travar a exclusão da turma)
+            for turma in turmas:
+                turma_id = turma[0]
+                cursor.execute('DELETE FROM matricula WHERE turma_id = %s', (turma_id,))
+            
+            # 3. Remover as turmas do professor
+            cursor.execute('DELETE FROM turma WHERE professor_id = %s', (id,))
+
+            # 4. Finalmente, remover o professor
             cursor.execute('DELETE FROM professor WHERE id=%s', (id,))
+            
             conn.commit()
             return {"status": "ok"}
         except Exception as e:
-            return {"status": "erro", "mensagem": f"Erro: {str(e)}"}
+            return {"status": "erro", "mensagem": f"Erro ao excluir professor: {str(e)}"}
         finally:
             conn.close()
