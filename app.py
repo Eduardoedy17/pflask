@@ -132,6 +132,16 @@ def editar_matricula(id):
     
     return render_template('matricula/form.html', matricula=matricula, alunos=alunos, turmas=turmas)
 
+@app.route('/matricula/remover/<int:id>')
+def remover_matricula(id):
+    dao = MatriculaDAO()
+    result = dao.remover(id)
+    if result["status"] == "ok":
+        flash("Matrícula removida!", "success")
+    else:
+        flash(result["mensagem"], "danger")
+    return redirect('/matricula')
+
 @app.route('/professor')
 def listar_professor():
     dao = ProfessorDAO()
