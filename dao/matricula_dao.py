@@ -4,13 +4,14 @@ class MatriculaDAO:
     def listar(self):
         conn = get_db_connection()
         cursor = conn.cursor()
-        # Traz o ID da matrícula, Nome do Aluno, Nome do Curso e Semestre da Turma
+        # Adicionado JOIN com Professor e o ID da turma para exibir na lista
         sql = """
-            SELECT m.id, a.nome, c.nome_curso, t.semestre
+            SELECT m.id, a.nome, c.nome_curso, t.semestre, t.id, p.nome
             FROM matricula m
             JOIN aluno a ON m.aluno_id = a.id
             JOIN curso c ON m.curso_id = c.id
             JOIN turma t ON m.turma_id = t.id
+            JOIN professor p ON t.professor_id = p.id
             ORDER BY m.id DESC
         """
         cursor.execute(sql)

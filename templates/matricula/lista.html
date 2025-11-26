@@ -15,23 +15,27 @@
                 <th>Aluno</th>
                 <th>Curso</th>
                 <th>Semestre</th>
-                <th>Turma</th>
+                <th>Turma / Professor</th> <!-- Cabeçalho atualizado -->
                 <th>Ações</th>
             </tr>
         </thead>
         <tbody>
             {% for item in lista %}
             <tr>
-                <td>{{ item[0] }}</td>
-                <td>{{ item[1] }}</td>
-                <td>{{ item[2] }}</td>
-                <td>{{ item[3] }}</td>
-                <td>{{ item[4] }}</td>
-<td>
-                <a href="/matricula/editar/{{ item[0] }}" class="btn btn-primary btn-sm">Editar</a>
-                <a href="/matricula/remover/{{ item[0] }}" class="btn btn-danger btn-sm"
-                   onclick="return confirm('Deseja remover esta matrícula?');">Remover</a>
-            </td>
+                <td>{{ item[0] }}</td> <!-- ID Matrícula -->
+                <td>{{ item[1] }}</td> <!-- Nome Aluno -->
+                <td>{{ item[2] }}</td> <!-- Nome Curso -->
+                <td>{{ item[3] }}</td> <!-- Semestre -->
+                
+                <!-- Nova formatação da coluna Turma -->
+                <!-- item[4] é o ID da Turma, item[5] é o Nome do Professor -->
+                <td>Turma {{ item[4] }} - {{ item[5] }}</td> 
+                
+                <td>
+                    <a href="/matricula/editar/{{ item[0] }}" class="btn btn-primary btn-sm">Editar</a>
+                    <a href="/matricula/remover/{{ item[0] }}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Deseja remover esta matrícula?');">Remover</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
