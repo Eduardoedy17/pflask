@@ -1,0 +1,48 @@
+{% include 'dashboard/cabecalho.html' %}
+{% include '/dashboard/menu.html' %}
+
+<h1 class="mb-4">
+    {% if matricula %} Editar Matrícula {% else %} Realizar Matrícula {% endif %}
+</h1>
+
+<div class="row">
+    <div class="col-12">
+      <form action="/matricula/salvar/{% if matricula %}{{ matricula[0] }}{% endif %}" method="POST">
+  
+        <div class="mb-3">
+          <label for="aluno_id" class="form-label">Aluno</label>
+          <select class="form-select" name="aluno_id" required>
+            <option value="" disabled {% if not matricula %}selected{% endif %}>Selecione um aluno...</option>
+            {% for aluno in alunos %}
+                <option value="{{ aluno[0] }}" 
+                    {% if matricula and matricula[1] == aluno[0] %}selected{% endif %}>
+                    {{ aluno[1] }}
+                </option>
+            {% endfor %}
+          </select>
+        </div>
+  
+        <div class="mb-3">
+          <label for="turma_id" class="form-label">Turma</label>
+          <select class="form-select" name="turma_id" required>
+            <option value="" disabled {% if not matricula %}selected{% endif %}>Selecione uma turma...</option>
+            {% for turma in turmas %}
+                <option value="{{ turma[0] }}"
+                    {% if matricula and matricula[3] == turma[0] %}selected{% endif %}>
+                    Turma {{ turma[0] }} - {{ turma[1] }} (Curso ID: {{ turma[2] }})
+                </option>
+            {% endfor %}
+          </select>
+        </div>
+  
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-success">
+            {% if matricula %} Atualizar {% else %} Salvar {% endif %}
+          </button>
+          <a href="/matricula" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+    </div>
+  </div>
+  
+{% include 'dashboard/rodape.html' %}

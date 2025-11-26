@@ -2,10 +2,13 @@ import sqlite3
 import psycopg2
 from flask import Flask, render_template, request, redirect, flash
 from dao.aluno_dao import AlunoDAO
+from dao.matricula_dao import MatriculaDAO
 from dao.professor_dao import ProfessorDAO
 from dao.curso_dao import CursoDAO
 from dao.turma_dao import TurmaDAO
+
 from dao.db_config import get_db_connection
+
 
 # Criação da aplicação Flask.
 app = Flask(__name__) 
@@ -76,6 +79,58 @@ def remover_aluno(id):
         flash(result["mensagem"], "danger")
 
     return redirect('/aluno')
+
+# --- ROTAS DE MATRÍCULA ---
+
+@app.route('/matricula')
+def listar_matricula():
+    dao = MatriculaDAO()
+    lista = dao.listar()
+    return render_template('matricula/lista.html', lista=lista)
+
+@app.route('/matricula/form')
+def form_matricula():
+    # Carrega alunos e turmas para os selects
+    aluno_dao = AlunoDAO()
+    turma_dao = TurmaDAO()
+    alunos = aluno_dao.listar()
+    turmas = turma_dao.listar() # O ideal aqui seria um listar que mostrasse info da turma
+    
+    return render_template('matricula/form.html', matricula=None, alunos=alunos, turmas=turmas)
+
+@app.route('/matricula/salvar/', methods=['POST'])
+@app.route('/matricula/salvar/<int:id>', methods=['POST'])
+def salvar_matricula(id=None):
+    aluno_id = request.form['aluno_id']
+    turma_id = request.form['turma_id']
+    
+    # Precisamos descobrir o curso_id através da turma selecionada
+    turma_dao = TurmaDAO()
+    turma = turma_dao.buscar_por_id(turma_id)
+    curso_id = turma[2] # O índice 2 é o curso_id na tabela turma
+    
+    dao = MatriculaDAO()
+    result = dao.salvar(id, aluno_id, curso_id, turma_id)
+
+    if result["status"] == "ok":
+        flash("Matrícula realizada com sucesso!", "success")
+    else:
+        flash(result["mensagem"], "danger")
+
+    return redirect('/matricula')
+
+@app.route('/matricula/editar/<int:id>')
+def editar_matricula(id):
+    dao = MatriculaDAO()
+    matricula = dao.buscar_por_id(id) # Busca a matrícula pelo ID
+    
+    aluno_dao = AlunoDAO()
+    turma_dao = TurmaDAO()
+    
+    alunos = aluno_dao.listar() # Carrega lista para o select
+    turmas = turma_dao.listar() # Carrega lista para o select
+    
+    return render_template('matricula/form.html', matricula=matricula, alunos=alunos, turmas=turmas)
 
 @app.route('/professor')
 def listar_professor():
@@ -171,7 +226,13 @@ def listar_turma():
 
 @app.route('/turma/form')
 def form_turma():
-    return render_template('turma/form.html', turma=None)
+    # Carrega as listas para preencher os selects
+    curso_dao = CursoDAO()
+    professor_dao = ProfessorDAO()
+    cursos = curso_dao.listar()
+    professores = professor_dao.listar()
+    
+    return render_template('turma/form.html', turma=None, cursos=cursos, professores=professores)
 
 @app.route('/turma/salvar/', methods=['POST'])  # Inserção
 @app.route('/turma/editar/<int:id>', methods=['POST'])  # atualização
@@ -191,9 +252,17 @@ def salvar_turma(id=None):
 
 @app.route('/turma/editar/<int:id>')
 def editar_turma(id):
-    dao = TurmaDAO()
-    turma = dao.buscar_por_id(id)
-    return render_template('turma/form.html', turma=turma)
+    turma_dao = TurmaDAO()
+    curso_dao = CursoDAO()
+    professor_dao = ProfessorDAO()
+    
+    # Busca a turma específica
+    turma = turma_dao.buscar_por_id(id)
+    # Carrega as listas para preencher os selects
+    cursos = curso_dao.listar()
+    professores = professor_dao.listar()
+    
+    return render_template('turma/form.html', turma=turma, cursos=cursos, professores=professores)
 
 @app.route('/turma/remover/<int:id>')
 def remover_turma(id):

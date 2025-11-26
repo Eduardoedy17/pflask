@@ -5,10 +5,9 @@
   {% if turma %}
     Editar Turma
   {% else %}
-    Cadastrar Turmas
+    Cadastrar Turma
   {% endif %}
 </h1>
-
 
 <div class="row">
     <div class="col-12">
@@ -20,13 +19,27 @@
         </div>
   
         <div class="mb-3">
-          <label for="curso" class="form-label">Curso ID</label>
-          <input type="text" class="form-control" id="curso_id" name="curso_id" value="{% if turma %}{{ turma[2] }}{% endif %}" required>
+          <label for="curso_id" class="form-label">Curso</label>
+          <select class="form-select" id="curso_id" name="curso_id" required>
+            <option value="" disabled {% if not turma %}selected{% endif %}>Selecione um curso...</option>
+            {% for curso in cursos %}
+                <option value="{{ curso[0] }}" {% if turma and turma[2] == curso[0] %}selected{% endif %}>
+                    {{ curso[1] }}
+                </option>
+            {% endfor %}
+          </select>
         </div>
   
         <div class="mb-3">
-          <label for="professor" class="form-label">Professor ID</label>
-          <input type="text" class="form-control" id="professor_id" name="professor_id" value="{% if turma %}{{ turma[3] }}{% endif %}" required>
+          <label for="professor_id" class="form-label">Professor</label>
+          <select class="form-select" id="professor_id" name="professor_id" required>
+            <option value="" disabled {% if not turma %}selected{% endif %}>Selecione um professor...</option>
+            {% for professor in professores %}
+                <option value="{{ professor[0] }}" {% if turma and turma[3] == professor[0] %}selected{% endif %}>
+                    {{ professor[1] }}
+                </option>
+            {% endfor %}
+          </select>
         </div>
   
         <div class="d-flex gap-2">
@@ -43,4 +56,4 @@
     </div>
   </div>
   
-  {% include 'dashboard/rodape.html' %}
+{% include 'dashboard/rodape.html' %}
